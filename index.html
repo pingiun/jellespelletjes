@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Jellespelletjes - Elke dag een nieuw spelletje</title>
+    <meta name="description" content="De dagelijkse spelletjes van Jelle: Woordle en Sudokudo. Elke dag een nieuwe puzzel voor iedereen." />
+
+    <meta property="og:url" content="https://jellespelletjes.nl" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Jellespelletjes" />
+    <meta property="og:description" content="De dagelijkse spelletjes van Jelle: Woordle en Sudokudo. Elke dag een nieuwe puzzel voor iedereen." />
+
+    <meta name="theme-color" content="#3CDA44" />
+    <link href="/images/sudokudo_logo_192x192.png" rel="icon shortcut" sizes="192x192" />
+
+    <!-- TODO: add Plausible snippet once jellespelletjes.nl is added in the analytics dashboard -->
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Open Sans", Helvetica, Verdana, sans-serif;
+        background: #fff;
+        color: #000;
+        -webkit-font-smoothing: antialiased;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: 0 16px;
+      }
+
+      /* Tile wordmark, woordle-style */
+      .wordmark {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        margin: 56px 0 12px;
+      }
+
+      .tile-row {
+        display: flex;
+        gap: 8px;
+      }
+
+      .tile {
+        width: 52px;
+        height: 52px;
+        background: #6aaa64;
+        color: #fff;
+        font-weight: 700;
+        font-size: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+      }
+
+      .tile-row.small .tile {
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
+      }
+
+      .tagline {
+        font-size: 17px;
+        margin: 10px 0 44px;
+        text-align: center;
+      }
+
+      .games {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 24px;
+        width: 100%;
+        max-width: 640px;
+      }
+
+      .game-card {
+        flex: 1 1 260px;
+        max-width: 300px;
+        border: 3px solid rgb(100, 100, 100);
+        padding: 24px;
+        text-align: center;
+        text-decoration: none;
+        color: #000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .game-card:hover {
+        border-color: #000;
+      }
+
+      .game-card img {
+        width: 96px;
+        height: 96px;
+      }
+
+      .game-card h2 {
+        font-size: 22px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+
+      .game-card p {
+        font-size: 14px;
+        color: rgb(100, 100, 100);
+      }
+
+      .play {
+        margin-top: 6px;
+        background: #3cda44;
+        color: #fff;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 10px 28px;
+        border-radius: 10px;
+      }
+
+      footer {
+        margin-top: auto;
+        padding: 40px 0 24px;
+        font-size: 13px;
+        color: rgb(100, 100, 100);
+        text-align: center;
+        line-height: 1.7;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wordmark" aria-label="Jellespelletjes">
+      <div class="tile-row">
+        <div class="tile">J</div>
+        <div class="tile">E</div>
+        <div class="tile">L</div>
+        <div class="tile">L</div>
+        <div class="tile">E</div>
+      </div>
+      <div class="tile-row small">
+        <div class="tile">S</div>
+        <div class="tile">P</div>
+        <div class="tile">E</div>
+        <div class="tile">L</div>
+        <div class="tile">L</div>
+        <div class="tile">E</div>
+        <div class="tile">T</div>
+        <div class="tile">J</div>
+        <div class="tile">E</div>
+        <div class="tile">S</div>
+      </div>
+    </div>
+
+    <p class="tagline">Elke dag een nieuw spelletje — iedereen krijgt dezelfde puzzel.</p>
+
+    <div class="games">
+      <a class="game-card" href="https://woordle.nl">
+        <img src="/images/woordle_logo_192x192.png" alt="Woordle logo" width="96" height="96" />
+        <h2>Woordle</h2>
+        <p>Zes beurten om het woord te gokken. Elke dag een nieuwe puzzel.</p>
+        <span class="play">Spelen</span>
+      </a>
+      <a class="game-card" href="https://sudokudo.nl">
+        <img src="/images/sudokudo_logo_192x192.png" alt="Sudokudo logo" width="96" height="96" />
+        <h2>Sudokudo</h2>
+        <p>Elke dag een nieuwe sudoku. Los hem snel op en deel je tijd!</p>
+        <span class="play">Spelen</span>
+      </a>
+    </div>
+
+    <footer>
+      Jellespelletjes is een website van pingiun solutions<br />
+      BTW Nr: NL004111081B24
+    </footer>
+  </body>
+</html>

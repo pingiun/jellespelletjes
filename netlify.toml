@@ -1,0 +1,14 @@
+[build]
+publish = "."
+
+[[redirects]]
+from = "https://jellespelletje.nl/*"
+to = "https://jellespelletjes.nl/:splat"
+status = 301
+force = true
+
+[[redirects]]
+from = "https://jelletjespelletje.nl/*"
+to = "https://jellespelletjes.nl/:splat"
+status = 301
+force = true
