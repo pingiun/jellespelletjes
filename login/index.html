@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inloggen - Jellespelletjes</title>
+    <meta name="robots" content="noindex" />
+    <link href="/images/sudokudo_logo_192x192.png" rel="icon shortcut" sizes="192x192" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: "Open Sans", Helvetica, Verdana, sans-serif;
+        background: #fff; color: #000;
+        display: flex; flex-direction: column; align-items: center;
+        min-height: 100vh; padding: 56px 16px 24px; gap: 24px;
+      }
+      h1 { font-size: 24px; letter-spacing: 3px; text-transform: uppercase; }
+      .card {
+        width: 100%; max-width: 380px; border: 3px solid rgb(100, 100, 100);
+        padding: 24px; display: flex; flex-direction: column; gap: 14px; text-align: center;
+      }
+      .sub { font-size: 14px; color: rgb(100, 100, 100); line-height: 1.5; }
+      input[type="email"] {
+        font-family: inherit; font-size: 16px; padding: 12px;
+        border: 2px solid rgb(100, 100, 100);
+      }
+      button {
+        font-family: inherit; font-size: 16px; font-weight: 600;
+        background: #3cda44; color: #fff; border: 0; border-radius: 10px;
+        padding: 12px; cursor: pointer;
+      }
+      button.secondary { background: rgb(200, 200, 200); color: #000; }
+      .error { color: rgb(220, 60, 60); font-size: 14px; }
+      .hidden { display: none; }
+      a { color: rgb(11, 105, 208); }
+    </style>
+  </head>
+  <body>
+    <h1>Jellespelletjes</h1>
+
+    <div class="card" id="card-form">
+      <p class="sub" id="intro">
+        Log in met je e-mailadres om je scores op te slaan. Je krijgt een link
+        per mail — geen wachtwoord nodig.
+      </p>
+      <input type="email" id="email" placeholder="jouw@email.nl" autocomplete="email" />
+      <button id="send">Stuur inloglink</button>
+      <p class="error hidden" id="error"></p>
+    </div>
+
+    <div class="card hidden" id="card-sent">
+      <p><strong>Check je mail!</strong></p>
+      <p class="sub">
+        We hebben een inloglink gestuurd. Klik erop op dit apparaat om in te
+        loggen. De link is 15 minuten geldig.
+      </p>
+    </div>
+
+    <div class="card hidden" id="card-loggedin">
+      <p>Ingelogd als <strong id="who"></strong></p>
+      <p class="sub" id="redirect-note"></p>
+      <button class="secondary" id="logout">Uitloggen</button>
+    </div>
+
+    <p class="sub"><a href="/">Terug naar jellespelletjes.nl</a></p>
+
+    <script>
+      const API = localStorage.getItem("jsp:api-base") || "https://api.jellespelletjes.nl";
+      const KNOWN_ORIGINS = ["https://sudokudo.nl", "https://woordle.nl"];
+      const $ = (id) => document.getElementById(id);
+      const show = (id) => {
+        for (const card of ["card-form", "card-sent", "card-loggedin"]) {
+          $(card).classList.toggle("hidden", card !== id);
+        }
+      };
+
+      const params = new URLSearchParams(location.search);
+      // Remember which game asked for login across the email round-trip.
+      // A dev override for the game origin is allowed via jsp:dev-origin.
+      const requestedOrigin = params.get("origin");
+      if (requestedOrigin) sessionStorage.setItem("jsp:pending-origin", requestedOrigin);
+
+      async function api(path, body, token) {
+        const response = await fetch(API + path, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            ...(token ? { authorization: "Bearer " + token } : {}),
+          },
+          body: JSON.stringify(body),
+        });
+        if (!response.ok) {
+          let message = "er ging iets mis";
+          try { message = (await response.json()).error || message; } catch {}
+          throw new Error(message);
+        }
+        return response.status === 204 ? null : response.json();
+      }
+
+      async function finishForOrigin(token) {
+        const origin = sessionStorage.getItem("jsp:pending-origin");
+        if (!origin) return false;
+        const allowed = KNOWN_ORIGINS.includes(origin) || localStorage.getItem("jsp:api-base");
+        if (!allowed) return false;
+        const { code } = await api("/auth/sso-code", { origin }, token);
+        sessionStorage.removeItem("jsp:pending-origin");
+        location.href = origin + "/auth/callback#code=" + encodeURIComponent(code);
+        return true;
+      }
+
+      async function main() {
+        const magicToken = params.get("token");
+        if (magicToken) {
+          history.replaceState(null, "", "/login/");
+          try {
+            const { token, user } = await api("/auth/magic-link/consume", { token: magicToken });
+            localStorage.setItem("jsp:hub-token", token);
+            localStorage.setItem("jsp:hub-email", user.email);
+          } catch (e) {
+            show("card-form");
+            $("error").textContent = "Inloglink ongeldig of verlopen — probeer opnieuw.";
+            $("error").classList.remove("hidden");
+            return;
+          }
+        }
+
+        const token = localStorage.getItem("jsp:hub-token");
+        if (token) {
+          try {
+            if (await finishForOrigin(token)) return;
+            $("who").textContent = localStorage.getItem("jsp:hub-email") || "";
+            show("card-loggedin");
+            return;
+          } catch {
+            // token probably expired; fall through to the form
+            localStorage.removeItem("jsp:hub-token");
+          }
+        }
+        show("card-form");
+      }
+
+      $("send").addEventListener("click", async () => {
+        $("error").classList.add("hidden");
+        try {
+          await api("/auth/magic-link", { email: $("email").value });
+          show("card-sent");
+        } catch (e) {
+          $("error").textContent = e.message;
+          $("error").classList.remove("hidden");
+        }
+      });
+      $("email").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") $("send").click();
+      });
+      $("logout").addEventListener("click", async () => {
+        const token = localStorage.getItem("jsp:hub-token");
+        localStorage.removeItem("jsp:hub-token");
+        localStorage.removeItem("jsp:hub-email");
+        try { await api("/logout", {}, token); } catch {}
+        show("card-form");
+      });
+
+      main();
+    </script>
+  </body>
+</html>
