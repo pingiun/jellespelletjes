@@ -173,13 +173,20 @@
         const token = localStorage.getItem("jsp:hub-token");
         if (token) {
           try {
+            // Revalidate: the session may have been revoked by a logout
+            // elsewhere (single sign-off).
+            const check = await fetch(API + "/me", {
+              headers: { authorization: "Bearer " + token },
+            });
+            if (!check.ok) throw new Error("session revoked");
             if (await finishForOrigin(token)) return;
             $("who").textContent = localStorage.getItem("jsp:hub-email") || "";
             show("card-loggedin");
             return;
           } catch {
-            // token probably expired; fall through to the form
+            // token expired or revoked; fall through to the form
             localStorage.removeItem("jsp:hub-token");
+            localStorage.removeItem("jsp:hub-email");
           }
         }
         show("card-form");
