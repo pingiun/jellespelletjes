@@ -215,6 +215,22 @@
       $("code").addEventListener("keydown", (e) => {
         if (e.key === "Enter") $("use-code").click();
       });
+
+      // Live update: when the magic link is opened in another tab on this
+      // device, that tab stores the hub session; the storage event lets this
+      // waiting tab continue immediately (redirect to the game or show
+      // logged-in) without a manual refresh.
+      window.addEventListener("storage", async (e) => {
+        if (e.key !== "jsp:hub-token" || !e.newValue) return;
+        if ($("card-sent").classList.contains("hidden")) return;
+        try {
+          if (await finishForOrigin(e.newValue)) return;
+        } catch {
+          // fall through to the logged-in card
+        }
+        $("who").textContent = localStorage.getItem("jsp:hub-email") || "";
+        show("card-loggedin");
+      });
       $("email").addEventListener("keydown", (e) => {
         if (e.key === "Enter") $("send").click();
       });
