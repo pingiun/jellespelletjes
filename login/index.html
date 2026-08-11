@@ -83,7 +83,13 @@
     <p class="sub"><a href="/">Terug naar jellespelletjes.nl</a></p>
 
     <script>
-      const API = localStorage.getItem("jsp:api-base") || "https://api.jellespelletjes.nl";
+      // Local development serves the hub from localhost: default to the local
+      // API there so any browser on this machine works without configuration.
+      const API =
+        localStorage.getItem("jsp:api-base") ||
+        (["localhost", "127.0.0.1"].includes(location.hostname)
+          ? "http://127.0.0.1:8931"
+          : "https://api.jellespelletjes.nl");
       const KNOWN_ORIGINS = ["https://sudokudo.nl", "https://woordle.nl"];
       const $ = (id) => document.getElementById(id);
       const show = (id) => {
@@ -118,14 +124,22 @@
       if (requestedOrigin) sessionStorage.setItem("jsp:pending-origin", requestedOrigin);
 
       async function api(path, body, token) {
-        const response = await fetch(API + path, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            ...(token ? { authorization: "Bearer " + token } : {}),
-          },
-          body: JSON.stringify(body),
-        });
+        let response;
+        try {
+          response = await fetch(API + path, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              ...(token ? { authorization: "Bearer " + token } : {}),
+            },
+            body: JSON.stringify(body),
+          });
+        } catch {
+          // Network failure is not the same as an invalid token.
+          const e = new Error("Kan de server niet bereiken — probeer het zo nog eens.");
+          e.network = true;
+          throw e;
+        }
         if (!response.ok) {
           let message = "er ging iets mis";
           try { message = (await response.json()).error || message; } catch {}
@@ -164,7 +178,9 @@
             completeLogin(data);
           } catch (e) {
             show("card-form");
-            $("error").textContent = "Inloglink ongeldig of verlopen — probeer opnieuw.";
+            $("error").textContent = e.network
+              ? e.message
+              : "Inloglink ongeldig of verlopen — probeer opnieuw.";
             $("error").classList.remove("hidden");
             return;
           }
