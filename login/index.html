@@ -32,6 +32,8 @@
       button.secondary { background: rgb(200, 200, 200); color: #000; }
       .error { color: rgb(220, 60, 60); font-size: 14px; }
       .hidden { display: none; }
+      .code-entry { display: flex; flex-direction: column; gap: 14px; }
+      .code-entry.hidden { display: none; }
       a { color: rgb(11, 105, 208); }
     </style>
   </head>
@@ -55,13 +57,15 @@
         loggen. De link is 15 minuten geldig.
       </p>
       <p class="sub">
-        Open je de link op een ander apparaat? Dan zie je daar een code die je
-        hier kunt invullen:
+        <a href="#" id="show-code-entry">Heb je op een ander apparaat een code gekregen?</a>
       </p>
-      <input type="text" id="code" inputmode="numeric" autocomplete="one-time-code"
-        pattern="[0-9]*" maxlength="6" placeholder="123456" style="text-align:center;letter-spacing:6px;font-size:22px" />
-      <button class="secondary" id="use-code">Inloggen met code</button>
-      <p class="error hidden" id="code-error"></p>
+      <div id="code-entry" class="code-entry hidden">
+        <p class="sub" id="code-entry-note">Vul hier de code in die je op het andere apparaat ziet:</p>
+        <input type="text" id="code" inputmode="numeric" autocomplete="one-time-code"
+          pattern="[0-9]*" maxlength="6" placeholder="000000" style="text-align:center;letter-spacing:6px;font-size:22px" />
+        <button class="secondary" id="use-code">Inloggen met code</button>
+        <p class="error hidden" id="code-error"></p>
+      </div>
     </div>
 
     <div class="card hidden" id="card-show-code">
@@ -211,11 +215,50 @@
         show("card-form");
       }
 
+      function revealCodeEntry(detected) {
+        $("code-entry").classList.remove("hidden");
+        $("show-code-entry").parentElement.classList.add("hidden");
+        if (detected) {
+          $("code-entry-note").textContent =
+            "Je opende de link op een ander apparaat — vul hier de code in die daar staat:";
+        }
+        $("code").focus();
+      }
+      $("show-code-entry").addEventListener("click", (e) => {
+        e.preventDefault();
+        revealCodeEntry(false);
+      });
+
+      // While waiting for the email, poll whether the link was opened on
+      // another device; if so, a transfer code exists — reveal the entry
+      // field automatically.
+      let pollTimer = null;
+      function pollForCrossDevice() {
+        if (pollTimer) return;
+        pollTimer = setInterval(async () => {
+          if ($("card-sent").classList.contains("hidden")) return;
+          if (!$("code-entry").classList.contains("hidden")) {
+            clearInterval(pollTimer);
+            return;
+          }
+          try {
+            const { code_issued } = await api("/auth/code/status", { request_id: requestId() });
+            if (code_issued) {
+              clearInterval(pollTimer);
+              revealCodeEntry(true);
+            }
+          } catch {
+            // transient; keep polling
+          }
+        }, 3000);
+      }
+
       $("send").addEventListener("click", async () => {
         $("error").classList.add("hidden");
         try {
           await api("/auth/magic-link", { email: $("email").value, request_id: requestId() });
           show("card-sent");
+          pollForCrossDevice();
         } catch (e) {
           $("error").textContent = e.message;
           $("error").classList.remove("hidden");
