@@ -151,7 +151,10 @@
       async function finishForOrigin(token) {
         const origin = sessionStorage.getItem("jsp:pending-origin");
         if (!origin) return false;
-        const allowed = KNOWN_ORIGINS.includes(origin) || localStorage.getItem("jsp:api-base");
+        // The API validates origins authoritatively; this check only avoids a
+        // pointless request. In local dev any origin may be attempted.
+        const dev = ["localhost", "127.0.0.1"].includes(location.hostname);
+        const allowed = KNOWN_ORIGINS.includes(origin) || dev;
         if (!allowed) return false;
         const { code } = await api("/auth/sso-code", { origin }, token);
         sessionStorage.removeItem("jsp:pending-origin");
