@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Over Jelle - Jellespelletjes</title>
-    <meta name="description" content="Over Jelle, de maker van Woordle en Sudokudo." />
+    <title>Uitleg - Jellespelletjes</title>
+    <meta name="description" content="Hoe werken de jellespelletjes en het jellespelletjes account?" />
     <link href="/images/sudokudo_logo_192x192.png" rel="icon shortcut" sizes="192x192" />
 
     <style>
@@ -63,7 +63,7 @@
         max-width: 600px;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 14px;
         margin-top: 40px;
         line-height: 1.6;
       }
@@ -74,6 +74,16 @@
         text-transform: uppercase;
         text-align: center;
         margin-bottom: 8px;
+      }
+
+      h2 {
+        font-size: 19px;
+        margin-top: 10px;
+      }
+
+      main img {
+        max-width: 100%;
+        height: auto;
       }
 
       a {
@@ -94,32 +104,40 @@
   <body>
     <nav class="topnav">
       <a href="/">Spelletjes</a>
-      <a href="/uitleg/">Uitleg</a>
+      <a href="/uitleg/" class="active">Uitleg</a>
       <a href="/account/">Mijn account</a>
-      <a href="/over/" class="active">Over Jelle</a>
+      <a href="/over/">Over Jelle</a>
     </nav>
 
     <main>
-      <h1>Over Jelle</h1>
+      <h1>Uitleg</h1>
+
+      <h2 id="account-explain">Jellespelletjes account</h2>
 
       <p>
-        Hoi! Ik ben Jelle Besseling, en ik maak dagelijkse spelletjes waarbij
-        iedereen elke dag dezelfde puzzel krijgt, zodat je je tijd en streak
-        met je vrienden kunt vergelijken.
+        Met een jellespelletjes account blijft jouw streak opgeslagen, ook als je naar een andere browser gaat, of je browser data wordt een keer opgeschoond.
       </p>
 
       <p>
-        Het begon met <a href="https://woordle.nl">Woordle</a>, de Nederlandse
-        variant op Wordle. Daarna kwam
-        <a href="https://sudokudo.nl">Sudokudo</a>: elke dag een nieuwe sudoku,
-        met een gewone puzzel voor iedereen en een expertpuzzel voor de pro's.
+        Zo kan je dus zeker weten dat jouw streak veilig is!
       </p>
 
       <p>
-        Vragen of ideeën? Stuur een berichtje op mijn LinkedIn pagina <a href="https://www.linkedin.com/company/jellespelletjes">jellespelletjes</a>.
-
-        Als je een kijkje in de keuken wil nemen kan je ook de code lezen op <a href="https://github.com/pingiun">mijn GitHub</a>
+        Bij alle jellespelletjes kan je in het ... menu inloggen, en je hoeft niet eens een wachtwoord te onthouden.
+        Zorg dat je elke keer hetzelfde email adres invult zodat je weer door kan gaan met je streak.
       </p>
+
+      <p>
+        Als je uitgelogd bent zie je dit:
+      </p>
+
+      <img src="/images/uitgelogd.png" alt="Instellingen met de knop Inloggen" />
+
+      <p>
+        Als je ingelogd bent zie je dit:
+      </p>
+
+      <img src="/images/ingelogd.png" alt="Instellingen waarin je bent ingelogd" />
     </main>
 
     <footer>
