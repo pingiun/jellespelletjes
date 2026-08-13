@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Mijn account - Jellespelletjes</title>
+    <meta name="robots" content="noindex" />
+    <link href="/images/sudokudo_logo_192x192.png" rel="icon shortcut" sizes="192x192" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Open Sans", Helvetica, Verdana, sans-serif;
+        background: #fff;
+        color: #000;
+        -webkit-font-smoothing: antialiased;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: 0 16px;
+      }
+
+      .topnav {
+        width: calc(100% + 32px);
+        margin: 0 -16px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        border-bottom: 2px solid #000;
+        flex: none;
+      }
+
+      .topnav a {
+        color: #000;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 4px 2px;
+        border-bottom: 3px solid transparent;
+      }
+
+      .topnav a.active {
+        border-bottom-color: #6aaa64;
+      }
+
+      .topnav a:hover {
+        border-bottom-color: #000;
+      }
+
+      main {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-top: 40px;
+      }
+
+      h1 {
+        font-size: 24px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        text-align: center;
+      }
+
+      .sub {
+        font-size: 14px;
+        color: rgb(100, 100, 100);
+        text-align: center;
+        line-height: 1.5;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      button,
+      .button {
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        background: #3cda44;
+        color: #fff;
+        border: 0;
+        border-radius: 10px;
+        padding: 12px 24px;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+        align-self: center;
+      }
+
+      button.secondary {
+        background: rgb(200, 200, 200);
+        color: #000;
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+
+      button.danger {
+        background: none;
+        color: rgb(220, 60, 60);
+        font-size: 13px;
+        text-decoration: underline;
+        padding: 4px;
+      }
+
+      .who {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border: 3px solid rgb(100, 100, 100);
+        padding: 14px 18px;
+        font-size: 15px;
+      }
+
+      .game-stats {
+        border: 3px solid rgb(100, 100, 100);
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .game-stats h2 {
+        font-size: 17px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-align: center;
+      }
+
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        text-align: center;
+      }
+
+      .stat {
+        flex: 1;
+      }
+
+      .stat b {
+        display: block;
+        font-size: 24px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stat span {
+        font-size: 12px;
+        color: rgb(100, 100, 100);
+      }
+
+      footer {
+        margin-top: auto;
+        padding: 40px 0 24px;
+        font-size: 13px;
+        color: rgb(100, 100, 100);
+        text-align: center;
+        line-height: 1.7;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="topnav">
+      <a href="/">Spelletjes</a>
+      <a href="/account/" class="active">Mijn account</a>
+      <a href="/over/">Over Jelle</a>
+    </nav>
+
+    <main>
+      <h1>Mijn account</h1>
+
+      <div id="logged-out" class="hidden">
+        <p class="sub">
+          Log in om je scores en streaks van alle jellespelletjes op één plek
+          te zien — en om ze veilig te bewaren, ook buiten je browser.
+        </p>
+        <p style="text-align: center; margin-top: 14px">
+          <a class="button" href="/login/?return=/account/">Inloggen</a>
+        </p>
+      </div>
+
+      <div id="logged-in" class="hidden">
+        <div class="who">
+          <span>Ingelogd als <strong id="email"></strong></span>
+          <button class="secondary" id="logout">Uitloggen</button>
+        </div>
+        <div id="games"></div>
+        <p class="sub" id="empty-note" class="hidden"></p>
+        <button class="danger" id="delete-account">Account en alle opgeslagen scores verwijderen</button>
+      </div>
+
+      <p class="sub" id="loading">Laden…</p>
+    </main>
+
+    <footer>
+      Jellespelletjes is een website van pingiun solutions<br />
+      BTW Nr: NL004111081B24
+    </footer>
+
+    <script>
+      const API =
+        localStorage.getItem("jsp:api-base") ||
+        (["localhost", "127.0.0.1"].includes(location.hostname)
+          ? "http://127.0.0.1:8931"
+          : "https://api.jellespelletjes.nl");
+      const $ = (id) => document.getElementById(id);
+      const GAME_NAMES = {
+        woordle: "Woordle",
+        woordle6: "Woordle6",
+        wordle: "Wordle (Engels)",
+        wordle6: "Wordle6 (Engels)",
+        sudokudo: "Sudokudo",
+        "sudokudo-expert": "Sudokudo Expert",
+      };
+
+      async function api(method, path, body) {
+        const token = localStorage.getItem("jsp:hub-token");
+        const response = await fetch(API + path, {
+          method,
+          headers: {
+            ...(body !== undefined ? { "content-type": "application/json" } : {}),
+            ...(token ? { authorization: "Bearer " + token } : {}),
+          },
+          body: body !== undefined ? JSON.stringify(body) : undefined,
+        });
+        if (response.status === 401) {
+          localStorage.removeItem("jsp:hub-token");
+          localStorage.removeItem("jsp:hub-email");
+        }
+        return response;
+      }
+
+      function statRow(stats) {
+        const pct = stats.played ? Math.round((stats.won / stats.played) * 100) : 0;
+        return `
+          <div class="stat-row">
+            <div class="stat"><b>${stats.played}×</b><span>gespeeld</span></div>
+            <div class="stat"><b>${pct}</b><span>Win %</span></div>
+            <div class="stat"><b>${stats.current_streak}</b><span>Huidige reeks</span></div>
+            <div class="stat"><b>${stats.max_streak}</b><span>Max reeks</span></div>
+          </div>`;
+      }
+
+      async function main() {
+        if (!localStorage.getItem("jsp:hub-token")) {
+          $("loading").classList.add("hidden");
+          $("logged-out").classList.remove("hidden");
+          return;
+        }
+        let profile = null;
+        try {
+          const response = await api("GET", "/profile");
+          if (response.ok) profile = await response.json();
+        } catch {
+          // fall through
+        }
+        $("loading").classList.add("hidden");
+        if (!profile) {
+          $("logged-out").classList.remove("hidden");
+          return;
+        }
+        $("email").textContent = profile.user.email;
+        const games = Object.entries(profile.games)
+          .filter(([, s]) => s.played > 0 || s.imported_baseline)
+          .map(
+            ([game, s]) => `
+              <div class="game-stats" style="margin-bottom: 14px">
+                <h2>${GAME_NAMES[game] || game}</h2>
+                ${statRow(s)}
+              </div>`,
+          );
+        $("games").innerHTML = games.join("");
+        if (games.length === 0) {
+          $("empty-note").textContent =
+            "Nog geen opgeslagen resultaten — speel een spelletje terwijl je ingelogd bent!";
+          $("empty-note").classList.remove("hidden");
+        }
+        $("logged-in").classList.remove("hidden");
+      }
+
+      $("logout").addEventListener("click", async () => {
+        try {
+          await api("POST", "/logout", {});
+        } catch {
+          // best effort
+        }
+        localStorage.removeItem("jsp:hub-token");
+        localStorage.removeItem("jsp:hub-email");
+        location.reload();
+      });
+
+      $("delete-account").addEventListener("click", async () => {
+        const sure = window.confirm(
+          "Weet je zeker dat je je account en ALLE opgeslagen scores wilt verwijderen? Dit kan niet ongedaan worden gemaakt.",
+        );
+        if (!sure) return;
+        try {
+          await api("DELETE", "/me");
+        } catch {
+          // best effort
+        }
+        localStorage.removeItem("jsp:hub-token");
+        localStorage.removeItem("jsp:hub-email");
+        location.reload();
+      });
+
+      main();
+    </script>
+  </body>
+</html>
