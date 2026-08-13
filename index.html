@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Jellespelletjes - Elke dag een nieuw spelletje</title>
-    <meta name="description" content="De dagelijkse spelletjes van Jelle: Woordle en Sudokudo. Elke dag een nieuwe puzzel voor iedereen." />
+    <meta name="description" content="De dagelijkse spelletjes van Jelle: Woordle. Elke dag een nieuwe puzzel voor iedereen." />
 
     <meta property="og:url" content="https://jellespelletjes.nl" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Jellespelletjes" />
-    <meta property="og:description" content="De dagelijkse spelletjes van Jelle: Woordle en Sudokudo. Elke dag een nieuwe puzzel voor iedereen." />
+    <meta property="og:description" content="De dagelijkse spelletjes van Jelle: Woordle. Elke dag een nieuwe puzzel voor iedereen." />
 
     <meta name="theme-color" content="#3CDA44" />
     <link href="/images/sudokudo_logo_192x192.png" rel="icon shortcut" sizes="192x192" />
@@ -22,6 +22,10 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+      }
+
+      p {
+        margin-top: 10px;
       }
 
       body {
@@ -36,13 +40,45 @@
         padding: 0 16px;
       }
 
+      /* Top navigation, matching the games' 2px-black-rule header */
+      .topnav {
+        width: calc(100% + 32px);
+        margin: 0 -16px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        border-bottom: 2px solid #000;
+        flex: none;
+      }
+
+      .topnav a {
+        color: #000;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 4px 2px;
+        border-bottom: 3px solid transparent;
+      }
+
+      .topnav a.active {
+        border-bottom-color: #6aaa64;
+      }
+
+      .topnav a:hover {
+        border-bottom-color: #000;
+      }
+
       /* Tile wordmark, woordle-style */
       .wordmark {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 8px;
-        margin: 56px 0 12px;
+        margin: 40px 0 12px;
       }
 
       .tile-row {
@@ -132,6 +168,14 @@
         border-radius: 10px;
       }
 
+      .account-explain {
+        margin-top: 24px;
+        max-width: 600px;
+        img {
+          max-width: 600px;
+        }
+      }
+
       footer {
         margin-top: auto;
         padding: 40px 0 24px;
@@ -144,6 +188,11 @@
   </head>
 
   <body>
+    <nav class="topnav">
+      <a href="/" class="active">Spelletjes</a>
+      <a href="/over/">Over Jelle</a>
+    </nav>
+
     <div class="wordmark" aria-label="Jellespelletjes">
       <div class="tile-row">
         <div class="tile">J</div>
@@ -166,7 +215,7 @@
       </div>
     </div>
 
-    <p class="tagline">Elke dag een nieuw spelletje — iedereen krijgt dezelfde puzzel.</p>
+    <p class="tagline">Elke dag een nieuw spelletje en iedereen krijgt dezelfde puzzel.</p>
 
     <div class="games">
       <a class="game-card" href="https://woordle.nl">
@@ -184,7 +233,33 @@
     </div>
 
     <div class="account-explain">
-      <h2>Jellespelletjes account</h2>
+      <h2 id="account-explain">Jellespelletjes account</h2>
+
+      <p>
+        Met een jellespelletjes account blijft jouw streak opgeslagen, ook als je naar een andere browser gaat, of je browser data wordt een keer opgeschoond.
+      </p>
+
+      <p>
+        Zo kan je dus zeker weten dat jouw streak veilig is!
+      </p>
+
+      <p>
+        Bij alle jellespelletjes kan je in het ... menu inloggen, en je hoeft niet eens een wachtwoord te onthouden.
+        Zorg dat je elke keer hetzelfde email adres invult zodat je weer door kan gaan met je streak.
+      </p>
+
+      <p>
+        Als je uitgelogd bent zie je dit:
+      </p>
+
+      <img src="images/uitgelogd.png">
+
+      <p>
+        Als je ingelogd bent zie je dit:
+      </p>
+
+      <img src="images/ingelogd.png">
+
     </div>
 
     <script>
