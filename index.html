@@ -105,6 +105,20 @@
         font-size: 22px;
       }
 
+      /* The 10-tile SPELLETJES row is 472px wide; scale it fluidly on
+         narrow screens so the page never overflows horizontally. */
+      @media (max-width: 540px) {
+        .tile-row.small {
+          gap: 5px;
+        }
+
+        .tile-row.small .tile {
+          width: calc((100vw - 32px - 45px) / 10);
+          height: calc((100vw - 32px - 45px) / 10);
+          font-size: calc((100vw - 32px - 45px) / 10 * 0.55);
+        }
+      }
+
       .tagline {
         font-size: 17px;
         margin: 10px 0 44px;
@@ -172,7 +186,8 @@
         margin-top: 24px;
         max-width: 600px;
         img {
-          max-width: 600px;
+          max-width: 100%;
+          height: auto;
         }
       }
 
