@@ -97,7 +97,12 @@
         (["localhost", "127.0.0.1"].includes(location.hostname)
           ? "http://127.0.0.1:8931"
           : "https://api.jellespelletjes.nl");
-      const KNOWN_ORIGINS = ["https://sudokudo.nl", "https://woordle.nl"];
+      const KNOWN_ORIGINS = [
+        "https://sudokudo.nl",
+        "https://woordle.nl",
+        "https://lettersoep.com",
+        "https://lettersoup.app",
+      ];
       const $ = (id) => document.getElementById(id);
       const show = (id) => {
         for (const card of ["card-form", "card-sent", "card-loggedin", "card-show-code"]) {
