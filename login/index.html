@@ -136,16 +136,41 @@
         localStorage.removeItem("jsp:request-id");
       }
 
+      // Pending state must survive the email round-trip, and the magic link
+      // usually opens in a NEW tab — so this lives in localStorage (shared
+      // across tabs), not sessionStorage, with a short expiry so a stale
+      // origin can't hijack an unrelated /login/ visit later.
+      const PENDING_TTL_MS = 30 * 60 * 1000;
+      function setPending(key, value) {
+        localStorage.setItem(key, JSON.stringify({ value, at: Date.now() }));
+      }
+      function getPending(key) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) return null;
+          const { value, at } = JSON.parse(raw);
+          if (typeof value !== "string" || Date.now() - at > PENDING_TTL_MS) {
+            localStorage.removeItem(key);
+            return null;
+          }
+          return value;
+        } catch {
+          return null;
+        }
+      }
+      function clearPending(key) {
+        localStorage.removeItem(key);
+      }
+
       const params = new URLSearchParams(location.search);
       // Remember which game asked for login across the email round-trip.
-      // A dev override for the game origin is allowed via jsp:dev-origin.
       const requestedOrigin = params.get("origin");
-      if (requestedOrigin) sessionStorage.setItem("jsp:pending-origin", requestedOrigin);
+      if (requestedOrigin) setPending("jsp:pending-origin", requestedOrigin);
       // ?return=/path sends the user back to a hub page after login
       // (same-origin paths only).
       const returnPath = params.get("return");
       if (returnPath && returnPath.startsWith("/") && !returnPath.startsWith("//")) {
-        sessionStorage.setItem("jsp:return-path", returnPath);
+        setPending("jsp:return-path", returnPath);
       }
 
       async function api(path, body, token) {
@@ -174,13 +199,13 @@
       }
 
       async function finishForOrigin(token) {
-        const back = sessionStorage.getItem("jsp:return-path");
+        const back = getPending("jsp:return-path");
         if (back) {
-          sessionStorage.removeItem("jsp:return-path");
+          clearPending("jsp:return-path");
           location.href = back;
           return true;
         }
-        const origin = sessionStorage.getItem("jsp:pending-origin");
+        const origin = getPending("jsp:pending-origin");
         if (!origin) return false;
         // The API validates origins authoritatively; this check only avoids a
         // pointless request. In local dev any origin may be attempted.
@@ -188,7 +213,7 @@
         const allowed = KNOWN_ORIGINS.includes(origin) || dev;
         if (!allowed) return false;
         const { code } = await api("/auth/sso-code", { origin }, token);
-        sessionStorage.removeItem("jsp:pending-origin");
+        clearPending("jsp:pending-origin");
         location.href = origin + "/auth/callback#code=" + encodeURIComponent(code);
         return true;
       }
