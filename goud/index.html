@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Jellespelletjes Goud - Binnenkort</title>
+    <meta name="description" content="Goud: geen advertenties, het puzzelarchief, streak-verzekering en meer. Eén account, alle spelletjes." />
+
+    <meta property="og:url" content="https://jellespelletjes.nl/goud/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Jellespelletjes Goud" />
+    <meta property="og:description" content="Geen advertenties, het puzzelarchief, streak-verzekering en meer. Eén account, alle spelletjes." />
+
+    <meta name="theme-color" content="#d4af37" />
+    <link href="/images/sudokudo_logo_192x192.png" rel="icon shortcut" sizes="192x192" />
+
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script async src="https://analytics.yele.dev/js/pa-IlBXicZI759qsp-bj88V_.js"></script>
+    <script>
+      window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init()
+    </script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Open Sans", Helvetica, Verdana, sans-serif;
+        background: #fff;
+        color: #000;
+        -webkit-font-smoothing: antialiased;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: 0 16px;
+      }
+
+      .topnav {
+        width: calc(100% + 32px);
+        margin: 0 -16px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        border-bottom: 2px solid #000;
+        flex: none;
+      }
+
+      .topnav a {
+        color: #000;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 4px 2px;
+        border-bottom: 3px solid transparent;
+      }
+
+      .topnav a.active {
+        border-bottom-color: #d4af37;
+      }
+
+      .topnav a:hover {
+        border-bottom-color: #000;
+      }
+
+      .wordmark {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin: 40px 0 12px;
+      }
+
+      .tile {
+        width: 52px;
+        height: 52px;
+        background: #d4af37;
+        color: #fff;
+        font-weight: 700;
+        font-size: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+      }
+
+      .tagline {
+        font-size: 17px;
+        margin: 10px 0 8px;
+        text-align: center;
+        max-width: 460px;
+      }
+
+      .subline {
+        font-size: 15px;
+        color: rgb(100, 100, 100);
+        text-align: center;
+        margin-bottom: 36px;
+      }
+
+      .features {
+        max-width: 460px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-bottom: 36px;
+      }
+
+      .feature {
+        display: flex;
+        gap: 12px;
+        align-items: baseline;
+      }
+
+      .feature b {
+        white-space: nowrap;
+      }
+
+      .feature::before {
+        content: "◆";
+        color: #d4af37;
+        flex: none;
+      }
+
+      .price-box {
+        border: 3px solid #d4af37;
+        padding: 22px 26px;
+        text-align: center;
+        max-width: 460px;
+        width: 100%;
+        margin-bottom: 32px;
+      }
+
+      .price {
+        font-size: 32px;
+        font-weight: 700;
+      }
+
+      .price small {
+        font-size: 16px;
+        font-weight: 400;
+      }
+
+      .founder {
+        margin-top: 8px;
+        font-size: 15px;
+      }
+
+      .founder b {
+        color: #b08d1e;
+      }
+
+      .no-sub {
+        margin-top: 10px;
+        font-size: 13px;
+        color: rgb(100, 100, 100);
+      }
+
+      form {
+        display: flex;
+        gap: 10px;
+        max-width: 460px;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      input[type="email"] {
+        flex: 1;
+        min-width: 0;
+        font-family: inherit;
+        font-size: 16px;
+        padding: 12px 14px;
+        border: 3px solid rgb(100, 100, 100);
+        border-radius: 0;
+      }
+
+      input[type="email"]:focus {
+        outline: none;
+        border-color: #d4af37;
+      }
+
+      button {
+        font-family: inherit;
+        background: #d4af37;
+        color: #fff;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 12px 24px;
+        border: 0;
+        border-radius: 10px;
+        cursor: pointer;
+        flex: none;
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+
+      .form-note {
+        font-size: 13px;
+        color: rgb(100, 100, 100);
+        text-align: center;
+        margin-bottom: 60px;
+      }
+
+      #done {
+        display: none;
+        max-width: 460px;
+        text-align: center;
+        border: 3px solid #3cda44;
+        padding: 22px 26px;
+        margin-bottom: 60px;
+        font-size: 17px;
+      }
+
+      #error {
+        display: none;
+        color: rgb(220, 60, 60);
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 16px;
+      }
+
+      @media (max-width: 420px) {
+        .tile {
+          width: 44px;
+          height: 44px;
+          font-size: 25px;
+        }
+
+        form {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="topnav">
+      <a href="/">Spelletjes</a>
+      <a href="/uitleg/">Uitleg</a>
+      <a href="/goud/" class="active">Goud</a>
+      <a href="/account/">Mijn account</a>
+      <a href="/over/">Over Jelle</a>
+    </nav>
+
+    <div class="wordmark" aria-label="Goud">
+      <div class="tile">G</div>
+      <div class="tile">O</div>
+      <div class="tile">U</div>
+      <div class="tile">D</div>
+    </div>
+
+    <p class="tagline">
+      Alle spelletjes, zonder advertenties, met extra's voor de echte dagelijkse puzzelaar.
+    </p>
+    <p class="subline">Eén account voor Woordle, Lettersoep, Sudokudo en alles wat nog komt.</p>
+
+    <div class="features">
+      <div class="feature"><span><b>Geen advertenties</b> — in alle spelletjes, op al je apparaten.</span></div>
+      <div class="feature"><span><b>Het archief</b> — speel elke puzzel van elke dag, ook die van vorig jaar.</span></div>
+      <div class="feature"><span><b>Streak-verzekering</b> — één gemiste dag per maand breekt je reeks niet.</span></div>
+      <div class="feature"><span><b>Uitgebreide statistieken</b> — je hele geschiedenis, records en trends.</span></div>
+      <div class="feature"><span><b>Gouden account</b> — goud icoontje en extra thema's, zoals nieuwe soepen.</span></div>
+      <div class="feature"><span><b>Je steunt één maker</b> — geen mediabedrijf, gewoon Jelle.</span></div>
+    </div>
+
+    <div class="price-box">
+      <div class="price">&euro;20 <small>per jaar</small></div>
+      <div class="founder">Schrijf je nu in en betaal straks de founder-prijs: <b>&euro;15 per jaar, voor altijd</b>.</div>
+      <div class="no-sub">Geen abonnementsval: verlengen doe je zelf, na een mailtje van ons.</div>
+    </div>
+
+    <div id="error"></div>
+    <form id="waitlist">
+      <input id="email" type="email" required placeholder="jouw@email.nl" autocomplete="email" />
+      <button id="submit" type="submit">Zet me op de lijst</button>
+    </form>
+    <p class="form-note">We mailen je alleen als Goud er is. Minder dan 2 cent per puzzel.</p>
+
+    <div id="done">
+      <b>Je staat op de lijst!</b><br />
+      We mailen je zodra Goud er is &mdash; met je founder-prijs.
+    </div>
+
+    <script>
+      const API = localStorage.getItem("jsp:api-base") || "https://api.jellespelletjes.nl";
+      const form = document.getElementById("waitlist");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const button = document.getElementById("submit");
+        const error = document.getElementById("error");
+        error.style.display = "none";
+        button.disabled = true;
+        try {
+          const response = await fetch(API + "/goud/waitlist", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ email: document.getElementById("email").value }),
+          });
+          if (!response.ok) throw new Error("bad response");
+          form.style.display = "none";
+          document.querySelector(".form-note").style.display = "none";
+          document.getElementById("done").style.display = "block";
+          plausible("goud-waitlist");
+        } catch {
+          error.textContent = "Er ging iets mis — probeer het zo nog eens.";
+          error.style.display = "block";
+          button.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
