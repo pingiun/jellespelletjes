@@ -72,6 +72,44 @@
         border-bottom-color: #000;
       }
 
+      /* Five items no longer fit narrow phones: the nav scrolls within
+         itself (auto margins keep it centered when it fits) so the page
+         never scrolls horizontally. */
+      .topnav {
+        overflow-x: auto;
+        justify-content: flex-start;
+        scrollbar-width: none;
+      }
+
+      .topnav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .topnav a {
+        flex: none;
+        white-space: nowrap;
+      }
+
+      .topnav a:first-child {
+        margin-left: auto;
+      }
+
+      .topnav a:last-child {
+        margin-right: auto;
+      }
+
+      @media (max-width: 560px) {
+        .topnav {
+          gap: 16px;
+          padding: 0 16px;
+        }
+
+        .topnav a {
+          font-size: 13px;
+          letter-spacing: 0.5px;
+        }
+      }
+
       .wordmark {
         display: flex;
         justify-content: center;
@@ -295,6 +333,9 @@
     <script>
       const API = localStorage.getItem("jsp:api-base") || "https://api.jellespelletjes.nl";
       const form = document.getElementById("waitlist");
+      // Logged in on the hub: prefill so joining is a single click.
+      const knownEmail = localStorage.getItem("jsp:hub-email");
+      if (knownEmail) document.getElementById("email").value = knownEmail;
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const button = document.getElementById("submit");

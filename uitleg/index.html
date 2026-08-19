@@ -58,6 +58,44 @@
         border-bottom-color: #000;
       }
 
+      /* Five items no longer fit narrow phones: the nav scrolls within
+         itself (auto margins keep it centered when it fits) so the page
+         never scrolls horizontally. */
+      .topnav {
+        overflow-x: auto;
+        justify-content: flex-start;
+        scrollbar-width: none;
+      }
+
+      .topnav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .topnav a {
+        flex: none;
+        white-space: nowrap;
+      }
+
+      .topnav a:first-child {
+        margin-left: auto;
+      }
+
+      .topnav a:last-child {
+        margin-right: auto;
+      }
+
+      @media (max-width: 560px) {
+        .topnav {
+          gap: 16px;
+          padding: 0 16px;
+        }
+
+        .topnav a {
+          font-size: 13px;
+          letter-spacing: 0.5px;
+        }
+      }
+
       main {
         width: 100%;
         max-width: 600px;
