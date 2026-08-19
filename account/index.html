@@ -171,6 +171,21 @@
         text-align: center;
         line-height: 1.7;
       }
+
+      .goud-promo {
+        display: block;
+        border: 3px solid #d4af37;
+        padding: 14px 18px;
+        margin: 8px 0 24px;
+        text-align: center;
+        text-decoration: none;
+        color: #000;
+        font-weight: 600;
+      }
+
+      .goud-promo:hover {
+        background: #faf3dd;
+      }
     </style>
       <!-- Privacy-friendly analytics by Plausible -->
     <script async src="https://analytics.yele.dev/js/pa-IlBXicZI759qsp-bj88V_.js"></script>
@@ -195,7 +210,7 @@
       <div id="logged-out" class="hidden">
         <p class="sub">
           Log in om je scores en streaks van alle jellespelletjes op één plek
-          te zien — en om ze veilig te bewaren, ook buiten je browser.
+          te zien, en om ze veilig te bewaren, ook buiten je browser.
         </p>
         <p style="text-align: center; margin-top: 14px">
           <a class="button" href="/login/?return=/account/">Inloggen</a>
@@ -211,6 +226,8 @@
           <button class="secondary" id="logout">Uitloggen</button>
         </div>
         <div id="games"></div>
+
+        <a class="goud-promo" href="/goud/">Binnenkort: Jellespelletjes Goud</a>
         <p class="sub" id="empty-note" class="hidden"></p>
         <button class="danger" id="delete-account">Account en alle opgeslagen scores verwijderen</button>
       </div>
@@ -237,6 +254,8 @@
         wordle6: "Wordle6 (Engels)",
         sudokudo: "Sudokudo",
         "sudokudo-expert": "Sudokudo Expert",
+        lettersoep: "Lettersoep",
+        lettersoup: "Lettersoup (Engels)",
       };
 
       async function api(method, path, body) {
@@ -298,7 +317,7 @@
         $("games").innerHTML = games.join("");
         if (games.length === 0) {
           $("empty-note").textContent =
-            "Nog geen opgeslagen resultaten — speel een spelletje terwijl je ingelogd bent!";
+            "Nog geen opgeslagen resultaten. Speel een spelletje terwijl je ingelogd bent!";
           $("empty-note").classList.remove("hidden");
         }
         $("logged-in").classList.remove("hidden");

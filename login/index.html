@@ -35,6 +35,11 @@
       .code-entry { display: flex; flex-direction: column; gap: 14px; }
       .code-entry.hidden { display: none; }
       a { color: rgb(11, 105, 208); }
+
+      .footer-links a {
+        display: block;
+        margin-top: 10px;
+      }
     </style>
       <!-- Privacy-friendly analytics by Plausible -->
     <script async src="https://analytics.yele.dev/js/pa-IlBXicZI759qsp-bj88V_.js"></script>
@@ -49,7 +54,7 @@
     <div class="card" id="card-form">
       <p class="sub" id="intro">
         Log in met je e-mailadres om je scores op te slaan. Je krijgt een link
-        per mail — geen wachtwoord nodig.
+        per mail, geen wachtwoord nodig.
       </p>
       <input type="email" id="email" placeholder="jouw@email.nl" autocomplete="email" />
       <button id="send">Stuur inloglink</button>
@@ -90,9 +95,9 @@
       <button class="secondary" id="logout">Uitloggen</button>
     </div>
 
-    <p class="sub">
+    <p class="sub footer-links">
       <a href="/uitleg/">Hoe werkt het jellespelletjes account?</a>
-      <a href="/goud/">Goud</a> ·
+      <a href="/goud/">Goud</a>
       <a href="/">Terug naar jellespelletjes.nl</a>
     </p>
 
@@ -137,7 +142,7 @@
       }
 
       // Pending state must survive the email round-trip, and the magic link
-      // usually opens in a NEW tab — so this lives in localStorage (shared
+      // usually opens in a NEW tab, so this lives in localStorage (shared
       // across tabs), not sessionStorage, with a short expiry so a stale
       // origin can't hijack an unrelated /login/ visit later.
       const PENDING_TTL_MS = 30 * 60 * 1000;
@@ -186,7 +191,7 @@
           });
         } catch {
           // Network failure is not the same as an invalid token.
-          const e = new Error("Kan de server niet bereiken — probeer het zo nog eens.");
+          const e = new Error("Kan de server niet bereiken. Probeer het zo nog eens.");
           e.network = true;
           throw e;
         }
@@ -239,7 +244,7 @@
             show("card-form");
             $("error").textContent = e.network
               ? e.message
-              : "Inloglink ongeldig of verlopen — probeer opnieuw.";
+              : "Inloglink ongeldig of verlopen. Probeer opnieuw.";
             $("error").classList.remove("hidden");
             return;
           }
@@ -272,7 +277,7 @@
         $("show-code-entry").parentElement.classList.add("hidden");
         if (detected) {
           $("code-entry-note").textContent =
-            "Je opende de link op een ander apparaat — vul hier de code in die daar staat:";
+            "Je opende de link op een ander apparaat. Vul hier de code in die daar staat:";
         }
         $("code").focus();
       }
@@ -282,7 +287,7 @@
       });
 
       // While waiting for the email, poll whether the link was opened on
-      // another device; if so, a transfer code exists — reveal the entry
+      // another device; if so, a transfer code exists: reveal the entry
       // field automatically.
       let pollTimer = null;
       function pollForCrossDevice() {
@@ -329,7 +334,7 @@
           show("card-loggedin");
         } catch (e) {
           $("code-error").textContent =
-            e.message === "wrong code" ? "Verkeerde code — probeer opnieuw." : "Code ongeldig of verlopen.";
+            e.message === "wrong code" ? "Verkeerde code. Probeer opnieuw." : "Code ongeldig of verlopen.";
           $("code-error").classList.remove("hidden");
         }
       });

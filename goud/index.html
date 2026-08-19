@@ -266,18 +266,18 @@
     <p class="subline">Eén account voor Woordle, Lettersoep, Sudokudo en alles wat nog komt.</p>
 
     <div class="features">
-      <div class="feature"><span><b>Geen advertenties</b> — in alle spelletjes, op al je apparaten.</span></div>
-      <div class="feature"><span><b>Het archief</b> — speel elke puzzel van elke dag, ook die van vorig jaar.</span></div>
-      <div class="feature"><span><b>Streak-verzekering</b> — één gemiste dag per maand breekt je reeks niet.</span></div>
-      <div class="feature"><span><b>Uitgebreide statistieken</b> — je hele geschiedenis, records en trends.</span></div>
-      <div class="feature"><span><b>Gouden account</b> — goud icoontje en extra thema's, zoals nieuwe soepen.</span></div>
-      <div class="feature"><span><b>Je steunt één maker</b> — geen mediabedrijf, gewoon Jelle.</span></div>
+      <div class="feature"><span><b>Geen advertenties:</b> in alle spelletjes, op al je apparaten.</span></div>
+      <div class="feature"><span><b>Het archief:</b> speel elke puzzel van elke dag, ook die van vorig jaar.</span></div>
+      <div class="feature"><span><b>Streak-verzekering:</b> dag gemist? Speel die puzzel alsnog en je reeks loopt gewoon door.</span></div>
+      <!-- <div class="feature"><span><b>Uitgebreide statistieken:</b> je hele geschiedenis, records en trends.</span></div> -->
+      <div class="feature"><span><b>Gouden icoontje:</b> jouw account in het goud, in alle spelletjes.</span></div>
+      <div class="feature"><span><b>Je steunt Jelle</b>. Alle spelletjes worden door mij gemaakt, en zo kan ik meer spelletjes maken.</span></div>
     </div>
 
     <div class="price-box">
       <div class="price">&euro;20 <small>per jaar</small></div>
       <div class="founder">Schrijf je nu in en betaal straks de founder-prijs: <b>&euro;15 per jaar, voor altijd</b>.</div>
-      <div class="no-sub">Geen abonnementsval: verlengen doe je zelf, na een mailtje van ons.</div>
+      <div class="no-sub">Geen abonnement: goud verloopt automatisch na een jaar tenzij je zelf vernieuwt.</div>
     </div>
 
     <div id="error"></div>
@@ -285,11 +285,11 @@
       <input id="email" type="email" required placeholder="jouw@email.nl" autocomplete="email" />
       <button id="submit" type="submit">Zet me op de lijst</button>
     </form>
-    <p class="form-note">We mailen je alleen als Goud er is. Minder dan 2 cent per puzzel.</p>
+    <p class="form-note">We mailen je alleen als Goud er is. Dit is geen spamlijst.</p>
 
     <div id="done">
       <b>Je staat op de lijst!</b><br />
-      We mailen je zodra Goud er is &mdash; met je founder-prijs.
+      We mailen je zodra Goud er is, met je founder-prijs.
     </div>
 
     <script>
@@ -313,7 +313,7 @@
           document.getElementById("done").style.display = "block";
           plausible("goud-waitlist");
         } catch {
-          error.textContent = "Er ging iets mis — probeer het zo nog eens.";
+          error.textContent = "Er ging iets mis: probeer het zo nog eens.";
           error.style.display = "block";
           button.disabled = false;
         }
